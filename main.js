@@ -25,3 +25,20 @@ function addUser() {
         alert('Please enter both name and email.');
     }
 }
+
+// Added features for storing the json fromat of object
+
+
+let obj =
+{
+    name: "Bina",
+    age: 44
+};
+console.log(obj);
+
+localStorage.setItem('myobj', obj);
+console.log(localStorage.getItem('myobj'));
+
+let obj1 = JSON.stringify(obj);
+localStorage.setItem('mys', obj1);
+console.log(localStorage.getItem('mys'));

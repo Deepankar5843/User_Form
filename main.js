@@ -1,3 +1,4 @@
+
 class User {
     constructor(name, email) {
         this.name = name;
@@ -5,35 +6,72 @@ class User {
     }
 
     createUserItem() {
-        // Create a new list item for the user
         var userItem = document.createElement('li');
         userItem.textContent = 'Name: ' + this.name + ', Email: ' + this.email;
 
-        // Create a delete button for the user
         var deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.className = 'deleteButton';
         deleteButton.addEventListener('click', () => this.deleteUser(userItem));
 
-        // Append the delete button to the user item
-        // userItem.insertBefore(deleteButton, userItem.firstChild);
+        var editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'editButton';
+        editButton.addEventListener('click', () => this.editUser(userItem));
+
+
+        userItem.insertBefore(editButton, userItem.firstChild.nextSibling);
         userItem.insertBefore(deleteButton, userItem.firstChild.nextSibling);
-
-        // userItem.insertBefore(userItem.firstChild, deleteButton);
-
 
         return userItem;
     }
 
     deleteUser(userItem) {
-        // Remove the user item from the user list
         userItem.parentNode.removeChild(userItem);
-
-        // Remove the user from local storage based on email
         localStorage.removeItem(this.email);
+    }
 
+    editUser(userItem) {
+        // Create a form for editing user information
+        var editForm = document.createElement('form');
+
+        var nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = this.name;
+
+        var emailInput = document.createElement('input');
+        emailInput.type = 'email';
+        emailInput.value = this.email;
+
+        var saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+        saveButton.addEventListener('click', () => this.saveChanges(userItem, nameInput.value, emailInput.value));
+
+        editForm.appendChild(nameInput);
+        editForm.appendChild(emailInput);
+        editForm.appendChild(saveButton);
+
+        // Replace the user item content with the edit form
+        userItem.innerHTML = '';
+        userItem.appendChild(editForm);
+        localStorage.removeItem(this.email);
+    }
+
+    saveChanges(userItem, newName, newEmail) {
+        // Update user information
+        this.name = newName;
+        this.email = newEmail;
+
+        // Update the user item content
+        userItem.textContent = 'Name: ' + this.name + ', Email: ' + this.email;
+
+        // Save changes to local storage
+        localStorage.setItem(this.email, JSON.stringify({ Name: this.name, Email: this.email }));
     }
 }
+
+
+
 
 function addUser() {
     var nameInput = document.getElementById('userName');
@@ -75,57 +113,6 @@ function addUser() {
         alert('Please enter both name and email.');
     }
 }
-
-
-
-
-
-// function addUser() {
-//     var nameInput = document.getElementById('userName');
-//     var emailInput = document.getElementById('userEmail');
-//     var userList = document.getElementById('users');
-
-//     var name = nameInput.value.trim();
-//     var email = emailInput.value.trim();
-
-//     if (name && email) {
-//         // Create a new list item for the user
-//         var userItem = document.createElement('li');
-//         userItem.textContent = 'Name: ' + name + ', Email: ' + email;
-
-//         // Append the new user item to the user list
-//         userList.appendChild(userItem);
-
-//         var deleteButton = document.createElement('button');
-//         deleteButton.textContent = 'Delete';
-//         deleteButton.className = 'deleteButton';
-//         deleteButton.addEventListener('click', () => this.deleteUser(userItem));
-
-
-//         // Updated feature of local Storage where we by adding new user
-
-//         let ans =
-//         {
-//             name: nameInput.value,
-//             Email: emailInput.value
-//         };
-
-//         let make = JSON.stringify(ans)
-
-//         // Use a consistent key for storage, like the email
-//         localStorage.setItem(email, make);
-
-//         // Clear the input fields
-//         nameInput.value = '';
-//         emailInput.value = '';
-//     } else {
-//         alert('Please enter both name and email.');
-//     }
-// }
-
-
-
-
 
 
 // Added features for storing the json fromat of object

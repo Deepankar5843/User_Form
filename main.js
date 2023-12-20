@@ -66,6 +66,9 @@ class User {
         userItem.textContent = 'Name: ' + this.name + ', Email: ' + this.email;
 
         // Save changes to local storage
+
+        // axios.post("https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata", this.email, JSON.stringify({ Name: this.name, Email: this.email }))
+
         localStorage.setItem(this.email, JSON.stringify({ Name: this.name, Email: this.email }));
     }
 }
@@ -101,10 +104,15 @@ function addUser() {
         var make = JSON.stringify(ans)
 
         // Use a consistent key for storage, like the email
-        localStorage.setItem(email, make);
-
-
-
+        // localStorage.setItem(email, make);
+        axios.post("https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata", make)
+            .then((response) => {
+                console.log(response);
+                fetchData();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
 
         // Clear the input fields
         nameInput.value = '';
@@ -113,6 +121,37 @@ function addUser() {
         alert('Please enter both name and email.');
     }
 }
+
+
+
+function fetchData() {
+    axios.get('https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata')
+        .then((res) => {
+            updateUser(res.data);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+}
+
+function updateUser(userData) {
+
+    var userList = document.getElementById('users');
+    userList.innerHTML = '';
+
+    userData
+        .forEach(element => {
+            var user = new User(element.Name, element.Email);
+            var userItem = user.createUserItem();
+            userList.appendChild(userItem);
+        });
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchData();
+});
+
 
 
 // Added features for storing the json fromat of object
@@ -138,3 +177,132 @@ console.log(localStorage.getItem('mys'));
 let objClear = JSON.parse(localStorage.getItem('mys'));
 console.log(localStorage.getItem('mys'));
 console.log(objClear);
+
+
+
+
+// QUESTION 1
+
+
+// function x() {
+//     var a = 7;
+//     function y() {
+//         console.log(a);
+//     }
+//     a = 100;
+//     return y;
+// }
+// var z = x();
+// console.log(z);
+// // z();
+
+
+
+// var num = { obj: 2 };
+// var a = 9;
+
+// function f(n) {
+//     return this.a + n;
+// }
+
+// var d = f(3);
+
+// console.log(d);
+
+
+
+// function x() {
+
+//     for (var i = 0; i < 7; i++) {
+//         function g(i) {
+//             setTimeout(function () {
+//                 console.log(i);
+//             }, i * 1000)
+//         }
+//         g(i);
+//     }
+// }
+// x();
+
+
+
+
+
+
+
+// function y() {
+
+
+
+//     for (let i = 1; i < 6; i++) {
+
+//         setTimeout(() => console.log(i), i * 1000)
+
+//     }
+
+//     console.log('Done Coding')
+
+
+
+// }
+
+// y();
+
+
+
+
+
+
+
+
+
+// function x() {
+
+//     let a = 10;
+
+//     function y() {
+
+//         console.log(a);
+
+//     }
+
+//     a = 50;
+
+//     return y;
+
+// }
+
+
+
+// const z = x()
+
+// console.log(z());
+
+
+
+
+
+
+
+
+
+// function x() {
+
+//     let a = 10;
+
+//     function y() {
+
+//         console.log(a);
+
+//     }
+
+//     return y;
+
+// }
+
+
+
+// const z = x()
+
+// console.log(z());
+

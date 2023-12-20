@@ -27,9 +27,35 @@ class User {
     }
 
     deleteUser(userItem) {
+
+        console.log('Deleting user:', this.name, this.email);
+
+        var userId = userItem.dataset.userId;
+
         userItem.parentNode.removeChild(userItem);
-        localStorage.removeItem(this.email);
+        // localStorage.removeItem(this.email);
+
+        var userEmail = this.email;
+
+        console.log('User email to delete:', userEmail);
+
+        // Send a DELETE request to the server
+        axios.delete(`https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata/${userId}`)
+            .then((response) => {
+                console.log('Delete:', response);
+            })
+            .catch((err) => {
+                console.log('Getting Error:', err);
+            });
+
+
     }
+
+
+
+
+
+
 
     editUser(userItem) {
         // Create a form for editing user information
@@ -105,7 +131,7 @@ function addUser() {
 
         // Use a consistent key for storage, like the email
         // localStorage.setItem(email, make);
-        axios.post("https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata", make)
+        axios.post("https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata", ans)
             .then((response) => {
                 console.log(response);
                 fetchData();
@@ -143,6 +169,7 @@ function updateUser(userData) {
         .forEach(element => {
             var user = new User(element.Name, element.Email);
             var userItem = user.createUserItem();
+            userItem.dataset.userId = element._id;
             userList.appendChild(userItem);
         });
 }

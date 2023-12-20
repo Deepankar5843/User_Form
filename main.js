@@ -80,7 +80,11 @@ class User {
         // Replace the user item content with the edit form
         userItem.innerHTML = '';
         userItem.appendChild(editForm);
-        localStorage.removeItem(this.email);
+        // localStorage.removeItem(this.email);
+
+
+
+
     }
 
     saveChanges(userItem, newName, newEmail) {
@@ -91,11 +95,20 @@ class User {
         // Update the user item content
         userItem.textContent = 'Name: ' + this.name + ', Email: ' + this.email;
 
-        // Save changes to local storage
+        // Save changes to Cloud Storage
 
-        // axios.post("https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata", this.email, JSON.stringify({ Name: this.name, Email: this.email }))
+        var userId = userItem.dataset.userId;
 
         localStorage.setItem(this.email, JSON.stringify({ Name: this.name, Email: this.email }));
+
+        console.log(userId);
+
+        console.log('Name:', this.name, 'Email:', this.email);
+
+        axios.put(`https://crudcrud.com/api/af57f2a594a04cf681d8ccd3048fc5ce/Usersdata/${userId}`, {
+            Name: `${this.name}`,
+            Email: `${this.email}`
+        })
     }
 }
 
